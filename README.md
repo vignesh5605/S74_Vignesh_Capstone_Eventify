@@ -285,6 +285,3 @@ Future collaboration and enhancements are welcome.
 ## 📄 License  
 
 This project is built for educational and demonstration purposes.
-
-## 🗂️ Project Architecture  
-
