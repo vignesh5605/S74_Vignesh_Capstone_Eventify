@@ -1,0 +1,87 @@
+/**
+ * QuoteForm Styles
+ * Clean form design with clear visual hierarchy
+ */
+
+.quote-form {
+  background-color: var(--color-surface);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.form-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-dark-text);
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+
+.error-icon {
+  font-size: var(--font-size-lg);
+}
+
+.btn-submit {
+  width: 100%;
+  padding: var(--spacing-md);
+  font-size: var(--font-size-base);
+  margin-top: var(--spacing-md);
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Success State */
+.quote-form-success {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-2xl);
+  color: white;
+  background-color: #22C55E;
+  border-radius: 50%;
+}
+
+.quote-form-success h3 {
+  font-size: var(--font-size-2xl);
+  color: var(--color-dark-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.quote-form-success p {
+  color: var(--color-secondary-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.redirect-msg {
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary-text);
+  opacity: 0.7;
+}

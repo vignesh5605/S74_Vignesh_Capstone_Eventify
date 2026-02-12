@@ -1,0 +1,97 @@
+/**
+ * VendorCard Styles
+ * Clean card design with hover effects
+ */
+
+.vendor-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+}
+
+.vendor-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-body-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.price-badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+}
+
+.price-budget {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #16A34A;
+}
+
+.price-standard {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #2563EB;
+}
+
+.price-premium {
+  background-color: rgba(168, 85, 247, 0.15);
+  color: #9333EA;
+}
+
+.price-luxury {
+  background-color: rgba(244, 193, 68, 0.15);
+  color: #B8860B;
+}
+
+.vendor-card-body {
+  flex: 1;
+  padding: var(--spacing-lg);
+}
+
+.vendor-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-dark-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.vendor-location {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary-text);
+  margin-bottom: var(--spacing-md);
+}
+
+.location-icon {
+  font-size: var(--font-size-base);
+}
+
+.vendor-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.vendor-card-footer {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.vendor-card-footer .btn {
+  flex: 1;
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+/* Hover state enhancement */
+.vendor-card:hover .vendor-name {
+  color: var(--color-primary-bg);
+}

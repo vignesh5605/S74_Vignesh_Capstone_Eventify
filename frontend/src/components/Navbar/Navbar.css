@@ -1,0 +1,126 @@
+/**
+ * Navbar Styles
+ * Uses Deep Navy (#0C1B34) background with official Eventify logo
+ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background-color: var(--color-primary-bg);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Brand / Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.navbar-brand:hover {
+  opacity: 0.9;
+}
+
+/* Focus state for accessibility */
+.navbar-brand:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+/* Official Logo Image */
+.navbar-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  /* Ensure crisp rendering */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Text fallback when logo image is not available */
+.brand-text {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-primary-text);
+  letter-spacing: -0.5px;
+}
+
+/* Navigation Links */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  list-style: none;
+}
+
+.nav-link {
+  position: relative;
+  padding: var(--spacing-sm) 0;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-primary-text);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity var(--transition-fast);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  opacity: 1;
+  color: var(--color-primary-text);
+}
+
+/* Focus state for nav links */
+.nav-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-accent);
+  border-radius: var(--radius-full);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar-logo {
+    height: 32px;
+  }
+  
+  .navbar-nav {
+    gap: var(--spacing-lg);
+  }
+  
+  .nav-link {
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-logo {
+    height: 28px;
+  }
+  
+  .navbar-nav {
+    gap: var(--spacing-md);
+  }
+}
