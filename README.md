@@ -1,65 +1,54 @@
-# 🚀 Eventify – Smart Event Planning & Vendor Bidding Platform  
+# 🚀 Eventify  
+### Smart Event Planning & Vendor Bidding Platform  
 
-## 🌍 Overview  
+---
+
+## 🌍 Introduction  
 
 Eventify is a full-stack event management web application built using the MERN Stack (MongoDB, Express.js, React.js, Node.js).
 
-It simplifies event planning by connecting:
+It is designed to simplify the event planning process by connecting customers, vendors, and event managers through a structured quotation and bidding system.
 
-- 👤 Customers
-- 🎯 Event Managers  
-- 🏢 Vendors (Photography, Catering, Venue, Decoration, etc.)
+Instead of contacting vendors manually and negotiating individually, Eventify provides a centralized platform where users can post event requirements and receive competitive quotations from multiple vendors.
 
-Instead of contacting multiple vendors manually and negotiating individually, users can:
-
-✔ Post event requirements  
-✔ Receive competitive quotations  
-✔ Compare prices  
-✔ Negotiate  
-✔ Finalize bookings  
-
-Eventify makes event planning structured, transparent, and stress-free.
+The platform promotes transparency, efficiency, and structured communication in event planning.
 
 ---
 
 ## 🎯 Problem Statement  
 
-Planning an event today is:
+Planning events today involves:
 
-- Time-consuming  
-- Unstructured  
-- Price opaque  
-- Dependent on personal contacts  
-- Hard to compare vendor quality  
+- Unstructured communication
+- Lack of price transparency
+- Manual vendor comparison
+- Time-consuming negotiations
+- Dependency on personal networks
 
-Busy professionals struggle to coordinate vendors efficiently while staying within budget.
-
-Eventify solves this by introducing a centralized platform with structured bidding and quotation management.
+Busy professionals and individuals often struggle to manage multiple vendors while staying within budget.
 
 ---
 
 ## 💡 Solution  
 
-Eventify provides:
+Eventify solves this by:
 
-- A digital marketplace for event planning
-- Vendor quotation comparison
-- Structured requirement posting
-- Competitive bidding system
-- Transparent pricing ecosystem
+- Providing a centralized marketplace for event services
+- Enabling structured requirement posting
+- Allowing vendors to submit competitive quotations
+- Supporting comparison and negotiation
+- Offering role-based dashboards for better workflow management
 
-Users can either:
-- Book individual services (like only photography)
-- Or request full event planning
+Users can either book individual services or request complete event planning.
 
 ---
 
 ## 👥 Target Users  
 
-1. Individuals planning weddings, birthdays, corporate events  
-2. Busy professionals  
-3. Event Managers looking for clients  
-4. Vendors looking for leads  
+- Individuals planning weddings, birthdays, or corporate events  
+- Working professionals with limited time  
+- Event managers seeking client leads  
+- Vendors looking for consistent project opportunities  
 
 ---
 
@@ -68,25 +57,28 @@ Users can either:
 ### 🔐 Authentication & Authorization
 - User Registration & Login
 - Role-based access (Customer / Vendor / Event Manager)
-- JWT-based authentication
+- JWT-based secure authentication
+- Protected routes
 
 ### 📝 Event Requirement Posting
-- Event Type
-- Date
-- Budget
+- Event type
+- Budget range
 - Location
-- Service Requirements
+- Event date
+- Required services
+- Additional notes
 
 ### 💬 Vendor Bidding System
-- Vendors submit quotations
+- Vendors view open event requests
+- Submit quotations with pricing details
 - Customers receive multiple bids
-- Negotiation option
-- Competitive pricing model
+- Compare quotations
+- Accept or reject proposals
 
-### 📊 Dashboard
-- Customers: Track requests & quotations  
-- Vendors: Manage bids  
-- Event Managers: Manage assigned events  
+### 📊 Dashboards
+- Customer Dashboard → Track event requests & quotations
+- Vendor Dashboard → Manage submitted bids
+- Event Manager Dashboard → Manage assigned projects
 
 ### 📦 Service Categories
 - Photography
@@ -98,7 +90,7 @@ Users can either:
 
 ---
 
-## 🛠️ Tech Stack  
+## 🛠️ Technology Stack  
 
 ### Frontend
 - React.js
@@ -112,14 +104,187 @@ Users can either:
 - MongoDB
 - Mongoose
 - JWT Authentication
+- Bcrypt (Password hashing)
 
-### Dev Tools
+### Development Tools
 - Git & GitHub
 - Postman
 - VS Code
-- Figma (UI Design)
+- Figma (UI/UX Design)
 
 ---
+
+
+## 🧱 System Architecture  
+
+Eventify follows a client-server architecture:
+
+- Frontend (React) communicates with Backend via REST APIs
+- Backend handles business logic
+- MongoDB stores application data
+- JWT ensures secure session handling
+
+---
+
+## 🗂️ Project Architecture  
+
+Eventify/
+│
+├── client/ # Frontend (React)
+│ ├── public/
+│ ├── src/
+│ │ ├── components/ # Reusable UI Components
+│ │ ├── pages/ # Application Pages
+│ │ ├── services/ # API Calls (Axios)
+│ │ ├── context/ # Global State Management
+│ │ ├── hooks/ # Custom Hooks
+│ │ ├── routes/ # Route Configuration
+│ │ └── App.jsx
+│ └── package.json
+│
+├── server/ # Backend (Node + Express)
+│ ├── config/ # Database & App Configuration
+│ ├── controllers/ # Business Logic
+│ ├── models/ # MongoDB Schemas
+│ ├── routes/ # API Routes
+│ ├── middleware/ # Authentication Middleware
+│ ├── utils/ # Helper Functions
+│ ├── server.js # Entry Point
+│ └── package.json
+│
+├── .env # Environment Variables
+├── README.md
+└── package.json
+
+
+
+---
+
+## 🧩 Database Design (High-Level)  
+
+### User Schema
+- name
+- email
+- password
+- role (customer / vendor / event_manager)
+- createdAt
+
+### Event Schema
+- title
+- description
+- eventType
+- budget
+- location
+- date
+- servicesRequired
+- createdBy (User reference)
+
+### Bid Schema
+- eventId (Reference)
+- vendorId (Reference)
+- quotationAmount
+- proposalDetails
+- status (pending / accepted / rejected)
+
+---
+
+## 🔄 Application Workflow  
+
+1. User registers and logs in  
+2. Customer creates an event requirement  
+3. Vendors browse available events  
+4. Vendors submit quotations  
+5. Customer compares bids  
+6. Customer accepts a bid  
+7. Event manager coordinates execution  
+
+---
+
+## 📡 API Endpoints (Sample)  
+
+### Auth Routes
+- POST /api/auth/register
+- POST /api/auth/login
+
+### Event Routes
+- POST /api/events
+- GET /api/events
+- GET /api/events/:id
+
+### Bid Routes
+- POST /api/bids
+- GET /api/bids/:eventId
+- PUT /api/bids/:id
+
+---
+
+## 🔐 Security Measures  
+
+- Password hashing using Bcrypt  
+- JWT-based authentication  
+- Role-based authorization middleware  
+- Protected API routes  
+- Environment variable protection  
+
+---
+
+## 🚀 Deployment Strategy  
+
+- Frontend: Vercel / Netlify  
+- Backend: Render / AWS / Azure  
+- Database: MongoDB Atlas  
+
+---
+
+## 📈 Future Enhancements  
+
+- Real-time notifications (Socket.io)
+- Integrated payment gateway
+- Vendor rating & review system
+- AI-based vendor recommendation engine
+- Event budgeting analytics
+- Admin dashboard
+- Mobile application version
+
+---
+
+## 🎓 Learning Outcomes  
+
+Through Eventify, the following concepts were implemented:
+
+- Full-stack MERN development
+- REST API design
+- Role-based authentication
+- MongoDB schema modeling
+- MVC backend architecture
+- Frontend routing & protected pages
+- Real-world bidding logic implementation
+- Deployment workflow
+
+---
+
+## 📌 Project Status  
+
+Currently under active development as a Capstone Project.
+
+Focus areas:
+- Scalable backend structure
+- Clean UI/UX
+- Secure authentication
+- Modular architecture
+
+---
+
+## 🤝 Contribution  
+
+This project is currently developed as a personal capstone initiative.  
+Future collaboration and enhancements are welcome.
+
+---
+
+## 📄 License  
+
+This project is built for educational and demonstration purposes.
 
 ## 🗂️ Project Architecture  
 
