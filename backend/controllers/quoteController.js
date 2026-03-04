@@ -1,125 +1,51 @@
-const QuoteRequest = require('../models/QuoteRequest');
-const Vendor = require('../models/Vendor');
-const mockData = require('../data/mockData');
+const Quote = require('../models/Quote');
+const Booking = require('../models/Booking');
+const EventRequest = require('../models/EventRequest');
+const VendorProfile = require('../models/VendorProfile');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
-const createQuoteRequest = async (req, res, next) => {
-  try {
-    const { userName, eventType, eventDate, requirements, vendorId } = req.body;
+exports.createQuote = catchAsync(async (req, res, next) => {
+  const event = await EventRequest.findById(req.body.eventRequest);
+  if (!event) return next(new AppError('Event request not found.', 404));
 
-    // Use mock data if MongoDB is not available
-    if (global.USE_MOCK_DATA) {
-      const vendorExists = mockData.vendors.find(v => v._id === vendorId);
-      
-      if (!vendorExists) {
-        return res.status(404).json({
-          success: false,
-          message: 'Vendor not found. Cannot create quote request.'
-        });
-      }
-      
-      // Validate event date is in the future
-      if (new Date(eventDate) <= new Date()) {
-        return res.status(400).json({
-          success: false,
-          message: 'Event date must be in the future'
-        });
-      }
-      
-      const newQuote = {
-        _id: String(mockData.quoteIdCounter()),
-        userName,
-        eventType,
-        eventDate: new Date(eventDate),
-        requirements,
-        vendorId: {
-          _id: vendorExists._id,
-          name: vendorExists.name,
-          category: vendorExists.category
-        },
-        status: 'pending',
-        createdAt: new Date()
-      };
-      
-      mockData.quotes.push(newQuote);
-      
-      return res.status(201).json({
-        success: true,
-        message: 'Quote request submitted successfully',
-        data: newQuote
-      });
-    }
+  const vendorProfile = await VendorProfile.findOne({ user: req.user._id });
+  if (!vendorProfile) return next(new AppError('Vendor profile is required to submit quote.', 400));
 
-    // Use MongoDB
-    const vendorExists = await Vendor.findById(vendorId);
-    
-    if (!vendorExists) {
-      return res.status(404).json({
-        success: false,
-        message: 'Vendor not found. Cannot create quote request.'
-      });
-    }
+  const quote = await Quote.create({ ...req.body, vendor: req.user._id, vendorProfile: vendorProfile._id });
+  res.status(201).json({ success: true, data: quote });
+});
 
-    const quoteRequest = await QuoteRequest.create({
-      userName,
-      eventType,
-      eventDate,
-      requirements,
-      vendorId,
-      status: 'pending'
-    });
+exports.getQuotesByEvent = catchAsync(async (req, res) => {
+  const quotes = await Quote.find({ eventRequest: req.params.id })
+    .populate('vendor', 'name email')
+    .populate('vendorProfile', 'category location rating startingPrice')
+    .sort('price');
 
-    res.status(201).json({
-      success: true,
-      message: 'Quote request submitted successfully',
-      data: quoteRequest
-    });
-  } catch (error) {
-    if (error.name === 'ValidationError') {
-      const messages = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({
-        success: false,
-        message: messages.join('. ')
-      });
-    }
-    
-    if (error.name === 'CastError') {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid vendor ID format'
-      });
-    }
-    
-    next(error);
+  res.status(200).json({ success: true, count: quotes.length, data: quotes });
+});
+
+exports.acceptQuote = catchAsync(async (req, res, next) => {
+  const quote = await Quote.findById(req.params.id).populate('eventRequest');
+  if (!quote) return next(new AppError('Quote not found.', 404));
+
+  if (String(quote.eventRequest.customer) !== String(req.user._id)) {
+    return next(new AppError('Only the event owner can accept quote.', 403));
   }
-};
 
-const getQuoteRequests = async (req, res, next) => {
-  try {
-    // Use mock data if MongoDB is not available
-    if (global.USE_MOCK_DATA) {
-      return res.status(200).json({
-        success: true,
-        count: mockData.quotes.length,
-        data: mockData.quotes
-      });
-    }
-    
-    // Use MongoDB
-    const quotes = await QuoteRequest.find()
-      .populate('vendorId', 'name category')
-      .sort({ createdAt: -1 });
+  quote.status = 'accepted';
+  await quote.save();
 
-    res.status(200).json({
-      success: true,
-      count: quotes.length,
-      data: quotes
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  await Quote.updateMany({ eventRequest: quote.eventRequest._id, _id: { $ne: quote._id } }, { status: 'rejected' });
 
-module.exports = {
-  createQuoteRequest,
-  getQuoteRequests
-};
+  const booking = await Booking.create({
+    customer: quote.eventRequest.customer,
+    vendor: quote.vendor,
+    eventRequest: quote.eventRequest._id,
+    quote: quote._id,
+    finalPrice: quote.price,
+    status: 'confirmed'
+  });
+
+  res.status(200).json({ success: true, data: { quote, booking } });
+});

@@ -1,51 +1,34 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar/Navbar';
-import Footer from './components/Footer/Footer';
-import HomePage from './pages/HomePage/HomePage';
-import VendorsPage from './pages/VendorsPage/VendorsPage';
-import VendorDetailPage from './pages/VendorDetailPage/VendorDetailPage';
-import QuoteRequestPage from './pages/QuoteRequestPage/QuoteRequestPage';
-import QuotesPage from './pages/QuotesPage/QuotesPage';
-import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
+import HomePage from './pages/HomePage';
+import MarketplacePage from './pages/MarketplacePage';
+import VendorProfilePage from './pages/VendorProfilePage';
+import EventRequirementPage from './pages/EventRequirementPage';
+import QuotesComparisonPage from './pages/QuotesComparisonPage';
+import BookingPage from './pages/BookingPage';
+import CustomerDashboard from './pages/CustomerDashboard';
+import VendorDashboard from './pages/VendorDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <div className="app">
-        <Navbar />
-        
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            
-            <Route path="/vendors" element={<VendorsPage />} />
-            
-            <Route path="/vendors/:id" element={<VendorDetailPage />} />
-            
-            <Route path="/vendors/:id/quote" element={<QuoteRequestPage />} />
-            
-            <Route path="/quotes" element={<QuotesPage />} />
-            
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        
-        <Footer />
-      </div>
-    </Router>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/marketplace" element={<MarketplacePage />} />
+        <Route path="/vendors/:id" element={<VendorProfilePage />} />
+        <Route path="/events/new" element={<ProtectedRoute role="customer"><EventRequirementPage /></ProtectedRoute>} />
+        <Route path="/quotes/:eventId" element={<ProtectedRoute role="customer"><QuotesComparisonPage /></ProtectedRoute>} />
+        <Route path="/bookings" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
+        <Route path="/dashboard/customer" element={<ProtectedRoute role="customer"><CustomerDashboard /></ProtectedRoute>} />
+        <Route path="/dashboard/vendor" element={<ProtectedRoute role="vendor"><VendorDashboard /></ProtectedRoute>} />
+        <Route path="/dashboard/admin" element={<ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/auth/login" element={<LoginPage />} />
+        <Route path="/auth/register" element={<RegisterPage />} />
+      </Routes>
+    </Layout>
   );
 }
-
-function NotFound() {
-  return (
-    <div className="not-found">
-      <div className="container">
-        <h1>404</h1>
-        <p>Page not found</p>
-        <a href="/" className="btn btn-primary">Go Home</a>
-      </div>
-    </div>
-  );
-}
-
-export default App;

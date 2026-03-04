@@ -1,87 +1,63 @@
-const Vendor = require('../models/Vendor');
-const mockData = require('../data/mockData');
+const VendorProfile = require('../models/VendorProfile');
+const Category = require('../models/Category');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
 
-const getVendors = async (req, res, next) => {
-  try {
-    // Use mock data if MongoDB is not available
-    if (global.USE_MOCK_DATA) {
-      let vendors = mockData.vendors;
-      
-      if (req.query.category) {
-        vendors = vendors.filter(v => v.category === req.query.category);
-      }
-      
-      return res.status(200).json({
-        success: true,
-        count: vendors.length,
-        data: vendors
-      });
-    }
-    
-    // Use MongoDB
-    const query = {};
-    
-    if (req.query.category) {
-      query.category = req.query.category;
-    }
+exports.getVendors = catchAsync(async (req, res) => {
+  const { page = 1, limit = 10, search = '', category, location, minPrice, maxPrice, rating } = req.query;
+  const filter = { approved: true };
 
-    const vendors = await Vendor.find(query).sort({ createdAt: -1 });
+  if (location) filter.location = { $regex: location, $options: 'i' };
+  if (minPrice || maxPrice) filter.startingPrice = { ...(minPrice && { $gte: Number(minPrice) }), ...(maxPrice && { $lte: Number(maxPrice) }) };
+  if (rating) filter.rating = { $gte: Number(rating) };
 
-    res.status(200).json({
-      success: true,
-      count: vendors.length,
-      data: vendors
-    });
-  } catch (error) {
-    next(error);
+  if (category) {
+    const categoryDoc = await Category.findOne({ name: { $regex: `^${category}$`, $options: 'i' } });
+    if (categoryDoc) filter.category = categoryDoc._id;
   }
-};
 
-const getVendorById = async (req, res, next) => {
-  try {
-    // Use mock data if MongoDB is not available
-    if (global.USE_MOCK_DATA) {
-      const vendor = mockData.vendors.find(v => v._id === req.params.id);
-      
-      if (!vendor) {
-        return res.status(404).json({
-          success: false,
-          message: 'Vendor not found'
-        });
-      }
-      
-      return res.status(200).json({
-        success: true,
-        data: vendor
-      });
-    }
-    
-    // Use MongoDB
-    const vendor = await Vendor.findById(req.params.id);
+  const query = VendorProfile.find(filter)
+    .populate('user', 'name')
+    .populate('category', 'name')
+    .skip((Number(page) - 1) * Number(limit))
+    .limit(Number(limit))
+    .sort('-createdAt');
 
-    if (!vendor) {
-      return res.status(404).json({
-        success: false,
-        message: 'Vendor not found'
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: vendor
-    });
-  } catch (error) {
-    if (error.name === 'CastError') {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid vendor ID format'
-      });
-    }
-    next(error);
+  if (search) {
+    query.find({ $or: [{ description: { $regex: search, $options: 'i' } }, { location: { $regex: search, $options: 'i' } }] });
   }
-};
 
-module.exports = {
-  getVendors,
-  getVendorById
-};
+  const vendors = await query;
+  const total = await VendorProfile.countDocuments(filter);
+
+  res.status(200).json({ success: true, page: Number(page), total, data: vendors });
+});
+
+exports.getVendorById = catchAsync(async (req, res, next) => {
+  const vendor = await VendorProfile.findById(req.params.id).populate('user', 'name email').populate('category', 'name');
+  if (!vendor) return next(new AppError('Vendor profile not found.', 404));
+  return res.status(200).json({ success: true, data: vendor });
+});
+
+exports.createVendorProfile = catchAsync(async (req, res, next) => {
+  const existing = await VendorProfile.findOne({ user: req.user._id });
+  if (existing) return next(new AppError('Vendor profile already exists.', 400));
+
+  const images = req.files?.map((file) => file.path) || [];
+  const profile = await VendorProfile.create({ ...req.body, user: req.user._id, portfolioImages: images });
+
+  return res.status(201).json({ success: true, data: profile });
+});
+
+exports.updateVendorProfile = catchAsync(async (req, res, next) => {
+  const profile = await VendorProfile.findOne({ user: req.user._id });
+  if (!profile) return next(new AppError('Vendor profile not found.', 404));
+
+  const images = req.files?.map((file) => file.path) || [];
+  if (images.length) req.body.portfolioImages = [...profile.portfolioImages, ...images];
+
+  Object.assign(profile, req.body);
+  await profile.save();
+
+  return res.status(200).json({ success: true, data: profile });
+});
