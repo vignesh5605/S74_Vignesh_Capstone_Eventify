@@ -1,90 +1,81 @@
-# 🎉 EVENTIFY  
-## The Elegant Event Management Platform  
-*Find vendors. Get quotes. Plan seamlessly.*
+# Eventify – AI-Powered Event Management Platform
+
+## Overview
+
+Eventify is an AI-powered event planning platform that acts as a virtual event manager. It enables users to plan, negotiate, and finalize events through a single system by combining AI-driven planning, vendor quotations, and controlled in-platform interactions.
 
 ---
 
-## 1. Project Overview
-**Eventify** is a web platform that connects users with event vendors, allowing them to request quotations, compare prices, and finalize bookings seamlessly.  
-Users can explore vendors across multiple categories—**venue**, **catering**, **photography**, and more—while vendors can **bid on requests**, offering competitive pricing.  
-The platform aims to **simplify event planning** for individuals and businesses.
+## Core Features
+
+### AI Event Management
+
+* Converts user requirements into structured event plans
+* Extracts key details such as budget, location, and scale
+* Generates optimized recommendations and cost breakdowns
+
+### Vendor Quotation System
+
+* Users post event requirements
+* Vendors receive requests and submit quotations
+* Users can compare multiple quotes before selection
+
+### Vendor Verification
+
+* Email and OTP-based identity verification
+* Document submission (MVP level)
+* Admin-controlled approval system
+* Only verified vendors participate in the system
+
+### In-Platform Communication and Negotiation
+
+* Chat enabled only after vendor selection
+* Negotiation handled within the platform
+* Supports structured and trackable conversations
+
+### Retention and Platform Control
+
+* Contact details are masked to prevent off-platform movement
+* Communication restricted to platform channels
+* AI-assisted negotiation with price optimization suggestions
+* Quote benchmarking to guide user decisions
+* Centralized storage of plans, chats, and agreements
+* Activity tracking to maintain continuity
+
+### Dashboard and Booking
+
+* Centralized event dashboard
+* Budget tracking and vendor overview
+* Final plan generation
+* Booking confirmation stored within the platform
 
 ---
 
-## 2. Features & Sections
+## Workflow
 
-### 📌 Core Features
-- 🔹 **Landing Page** – Browse vendors, sign up/login, and explore featured services.
-- 🔹 **User Dashboard** – Track event requests, manage quotes, and book vendors.
-- 🔹 **Create Event Request** – Define event details, select service categories, and invite bids.
-- 🔹 **Vendor Dashboard** – Receive requests, send quotations, and negotiate pricing.
-- 🔹 **How It Works** – Step-by-step guide for users and vendors.
-- 🔹 **Bookings** – Secure event bookings.
-
----
-
-## 3. Detailed Features
-
-### 🎭 Event Request System
-- ✔ Users specify event type, date, budget, and required services.
-- ✔ Vendors receive requests and submit quotations.
-- ✔ Users can compare, negotiate, and finalize bookings.
-
-### 💼 Vendor Profiles & Ratings
-- ✔ Verified vendor profiles with portfolio & pricing.
-- ✔ User reviews and ratings for credibility.
-
-### 📑 Quotation
-- ✔ Vendors submit price quotes.
-- ✔ Users can accept, decline, or negotiate.
-
-### 📅 Booking & Confirmation
-- ✔ Users confirm bookings directly through the platform.
-
-### 🔔 Notifications & Updates
-- ✔ Email & in-app alerts for quote responses & event updates.
-
-### 📊 User Dashboard
-- ✔ Track all active and past bookings.
-
-### 📦 Vendor Dashboard
-- ✔ Manage received event requests.
-- ✔ Submit quotes and track negotiations.
+1. User submits event requirements
+2. Vendors receive request and submit quotations
+3. User reviews and selects a vendor
+4. Chat opens for negotiation within platform
+5. System generates final plan
+6. User confirms booking and saves event
 
 ---
 
-## 4. Tech Stack
+## Tech Stack
 
-- 🟢 **Frontend:** React + Tailwind CSS  
-- 🟢 **Backend:** Node.js, Express  
-- 🟢 **Database:** MongoDB  
-- 🟢 **Authentication:** Firebase Auth (Google login)  
-- 🟢 **File Uploads:** Multer (for vendor portfolios)  
-- 🟢 **Notifications:** Nodemailer (email alerts)  
-- 🟢 **Deployment:** Vercel (Frontend), Render (Backend)
+Frontend: React.js, Tailwind CSS
+Backend: Node.js, Express.js
+Database: MongoDB
+AI Layer: Rule-based logic with Google Gemini API integration
 
 ---
 
-## 5. Project Timeline & Daily Plan
+## Key Highlights
 
-### 🗓️ Week 1 – Planning & Setup
-- ✅ **Day 1–2:** Define core features, database schema, and workflows.
-- ✅ **Day 3–4:** Initialize GitHub repo, set up backend & frontend.
-- ✅ **Day 5–7:** Design low-fidelity & high-fidelity UI (Figma).
-
-### 🛠️ Week 2 – Core Development
-- ✅ **Day 8–10:** Implement authentication (Google login, JWT).
-- ✅ **Day 11–14:** Develop Create Event Request & Vendor Dashboard.
-
-### ⚙️ Week 3 – Core Functionality & Features
-- ✅ **Day 15–17:** Build Quotation System.
-- ✅ **Day 18–20:** Implement Notifications, Ratings & Reviews, and Booking System.
-
-### 🚀 Week 4 – Testing & Deployment
-- ✅ **Day 21–23:** Testing, debugging, and API optimizations.
-- ✅ **Day 24–26:** Deploy frontend/backend on Vercel & Render.
-- ✅ **Day 27–30:** Final UI polish, vendor verification, and soft launch.
+* AI-driven event planning and negotiation
+* Verified and controlled vendor ecosystem
+* End-to-end workflow within a single platform
+* Strong retention design to prevent off-platform leakage
 
 ---
-## 🚀 Deployed Frontend Link
-https://eventify-frontend.netlify.app/
